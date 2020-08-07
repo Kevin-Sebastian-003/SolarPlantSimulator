@@ -1,0 +1,57 @@
+{% extends "plant/base.html" %}
+{% load static %}
+{% block styles %}
+	.plants_info .fa-pause {
+		color : red;
+	}
+
+    .plants_info .fa-play {
+		color : green;
+	}
+
+{% endblock %}
+
+
+{% block content %}
+<div class="container plants_info">
+    <div class="row">
+        <h3>Plants List</h3>
+    </div>
+    <div class="row">
+		<div class="table-responsive-sm">
+		    <table class="table table-sm table-hover table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Plant Name</th>
+                        <th>Plant Id</th>
+                        <th>Status</th>
+						<th>Action</th>
+                    </tr>
+                </thead>
+				{% if plant_list %}
+					{% for plant in plant_list %}
+						<tr>
+							<td><a href="{% url 'plant:plant_detail' plant.plant_id %}">{{ plant.name }}</a></td>
+							<td>{{ plant.plant_id }}</td>
+							<td>{{ plant.status }}</td>
+							<td>
+								{% if plant.status == "RUNNING"%}
+									<i class="fa fa-pause" aria-hidden="true" onclick="location.href = '{% url 'plant:plant_stop' plant.plant_id %}';" ></i>
+								{% else %}
+									<i class="fa fa-play" aria-hidden="true" onclick="location.href = '{% url 'plant:plant_start' plant.plant_id %}';" ></i>
+							   {% endif%}
+							</td>
+						</tr>
+					{% endfor %}
+
+				{% endif %}
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<table>
+			<button onclick="location.href = '{% url 'plant:plant_create' %}';" id="createDevice" class="btn btn-primary">Add Plant</button>
+		</table>
+	</div>
+</div>
+{% endblock %}

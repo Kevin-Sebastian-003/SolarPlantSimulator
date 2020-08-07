@@ -1,0 +1,21 @@
+{% extends "plant/base.html" %}
+
+{% block content %}
+{% if device_list %}
+    <ul>
+    {% for device in device_list %}
+    <li><a href="{% url 'devices:device_detail' device.name %}">{{ device.name }}</a></li>
+    {% endfor %}
+    </ul>
+    </br>
+    <table class="table">
+	<button onclick="location.href = './create';" id="createDevice" class="float-left submit-button" >Add Device</button>
+    </table>
+{% else %}
+    <p>No devices available.</p>
+	<table>
+		<button onclick="location.href = './create';" id="createDevice" class="float-left submit-button" >Create Device</button>
+	</table>
+{% endif %}
+
+{% endblock %}

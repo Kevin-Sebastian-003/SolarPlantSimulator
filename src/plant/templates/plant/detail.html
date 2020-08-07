@@ -1,0 +1,102 @@
+{% extends "plant/base.html" %}
+{% load static %}
+{% block styles %}
+	.container .fa-pause {
+		color : red;
+        padding-left: 15% !important;
+	}
+
+    .container .fa-play {
+		color : green;
+        padding-left: 15% !important;
+	}
+    .container .fa-trash {
+		padding-left: 15% !important;
+	}
+    .container .fa-pencil {
+		padding-left: 15% !important;
+	}
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h1>{{ plant_info.name }}</h1>
+    </div>
+    <div class="row">
+        <div class="table-responsive-sm">
+            <table class="table table-sm table-hover table-bordered">
+    	        <tr>
+	                <td class="table-info">Plant Name </td>
+	                <td>{{ plant_info.name}}</td>
+    	        </tr>
+    	        <tr>
+	                <td class="table-info">Plant Id </td>
+	                <td>{{ plant_info.plant_id}}</td>
+    	        </tr>
+    	        <tr>
+	                <td class="table-info"># of Devices </td>
+	                <td>{{ devices|length }}</td>
+    	        </tr>
+                <tr>
+	                <td class="table-info">Status</td>
+	                <td>{{ status }}</td>
+    	        </tr>
+            </table>
+        </div>
+        </p>
+    </div>
+    <div class="row">
+	    <div class="table-responsive-sm">
+		    <table class="table table-sm table-hover table-bordered">
+                <caption>List of Devices</caption>
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Device Name</th>
+                        <th>Plant Id</th>
+                        <th>Block Id</th>
+                        <th>Room Id</th>
+                        <th>Device Id</th>
+                        <th>Device Type</th>
+                        <th>Status</th>
+                        <th width="100px" >Actions</th>
+                    </tr>
+                </thead>
+                {% for device in devices %}
+                    <tr>
+                        <td><a href="{% url 'devices:device_detail' device.name %}">{{ device.name }}</a></td>
+                        <td> {{ device.plant_id}} </td>
+                        <td> {{ device.block_id}} </td>
+                        <td> {{ device.room_id}} </td>
+                        <td> {{ device.device_id}} </td>
+                        <td> {{ device.get_type_display}} </td>
+                        <td> {{ device.status}} </td>
+                        <td>
+                            {% if device.status == "RUNNING" %}
+                                <i class="fa fa-pause" aria-hidden="true" onclick="location.href = '{% url 'devices:device_stop' device.name %}';" ></i>
+                            {% else %}
+                                <i class="fa fa-play" aria-hidden="true" onclick="location.href = '{% url 'devices:device_start' device.name %}';" ></i>
+                            {% endif%}
+                            <i class="fa fa-pencil" aria-hidden="true" onclick="location.href = '{% url 'devices:device_edit' device.name %}';" ></i>
+                            <i class="fa fa-trash" aria-hidden="true" onclick="location.href = '{% url 'devices:device_delete' device.name %}';" ></i>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+	    <button class="btn btn-primary btn-primary-spacing" onclick="location.href = '{% url 'devices:device_create' %}';" id="createDevice" >Add Device</button>
+        {% if status == "RUNNING"%}
+            <button class="btn btn-danger btn-primary-spacing" onclick="location.href = '{% url 'plant:plant_stop' plant_info.plant_id %}';" id="stopPlant" >Stop Plant Simulation</button>
+        {% else %}
+            <button class="btn btn-success btn-primary-spacing" onclick="location.href = '{% url 'plant:plant_start' plant_info.plant_id %}';" id="startPlant" >Run Plant Simulation</button>
+        {% endif%}
+        <button class="btn btn-danger btn-primary-spacing" onclick="location.href = '{% url 'plant:plant_delete' plant_info.plant_id %}';" id="deletePlant" >Delete Plant</button>
+        <button class="btn btn-primary btn-primary-spacing" onclick="location.href = '{% url 'plant:edit_plant' plant_info.plant_id %}';" id="editPlant" >Edit Plant Info</button>
+    </div>
+</div>
+
+{% endblock %}
