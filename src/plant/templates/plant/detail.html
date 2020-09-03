@@ -68,7 +68,11 @@
                         <td><a href="{% url 'devices:device_detail' device.name %}">{{ device.name }}</a></td>
                         <td> {{ device.plant_id}} </td>
                         <td> {{ device.block_id}} </td>
+                        {% if device.type == 4%}
+                        <td>N/A</td>
+                        {%else%}
                         <td> {{ device.room_id}} </td>
+                        {%endif%}
                         <td> {{ device.device_id}} </td>
                         <td> {{ device.get_type_display}} </td>
                         <td> {{ device.status}} </td>
